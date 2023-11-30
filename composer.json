@@ -9,8 +9,10 @@
             "App\\": "src/",
             "App\\Models\\": "src/models/",
             "App\\Config\\": "src/config/",
+            "App\\Repositories\\": "src/repositories/",
+            "App\\Factories\\": "src/factories/",
             "App\\Controllers\\": "src/controllers/",
-            "App\\Repositories\\": "src/repositories/"
+            "App\\Models\\Mappers\\": "src/models/mappers/"
         }
     }
 }

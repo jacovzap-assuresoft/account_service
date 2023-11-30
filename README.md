@@ -28,6 +28,13 @@ email is unique
 password will be hashed
 roleId references role table, and have to existis rol with id:1 (1), id:2 (trainee), id:3 (trainer)
 
+## Run Project
+You can run project with:
+php -S localhost:[port]
+
+Make sure of run comand:
+composer dump-autoload
+
 ## Set .env
 Your .env needs the following variables:
 

@@ -1,5 +1,5 @@
 <?php
-namespace App\factories;
+namespace App\Factories;
 
 use App\Controllers\UserController;
 use App\Repositories\UserPGRepository;
