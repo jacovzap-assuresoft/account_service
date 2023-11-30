@@ -9,9 +9,9 @@ class User
     private string $lastName;
     private string $email;
     private string $password;
-    private int $roleId;
+    private ?int $roleId;
 
-    public function __construct(int $id,string $name, string $lastName, string $email, string $password, int $roleId)
+    public function __construct(?int $id = null, ?string $name = null, ?string $lastName = null, ?string $email = null, ?string $password = null, ?int $roleId = null)
     {
         $this->id = $id;
         $this->name = $name;
@@ -31,7 +31,7 @@ class User
         return $hashedPassword;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -56,7 +56,7 @@ class User
         return $this->password;
     }
 
-    public function getRoleId(): int
+    public function getRoleId(): ?int
     {
         return $this->roleId;
     }
@@ -99,7 +99,7 @@ class User
             'lastName' => $this->lastName,
             'email' => $this->email,
             'password' => $this->password,
-            'roleId' => $this->roleId
+            'roleId' => $this->roleId ?? null
         ];
     }
 }

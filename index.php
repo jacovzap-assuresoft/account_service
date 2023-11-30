@@ -18,9 +18,9 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: *");
 
 $userControllerFactory = new UserControllerFactory();
+$userController= $userControllerFactory->createPGController();
 
-Flight::route("POST /users", function () use ($userControllerFactory) {
-    $userController = $userControllerFactory->createPGController();
+Flight::route("POST /users", function () use ($userController) {
     $userController->create();
 });
 

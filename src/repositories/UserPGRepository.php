@@ -15,7 +15,7 @@ class UserPGRepository implements UserRepository
     }
 
     public function create(User $user): array {
-        $query = "INSERT INTO public.user (name, last_name, email, password, role_id) VALUES (:name, :last_name, :email, :password, :role_id)";
+        $query = "INSERT INTO public.user (name, last_name, email, password, role_id) VALUES (:name, :last_name, :email, :password, :role_id) RETURNING *";
 
         $stmt = $this->db->prepare($query);
         print_r($user);
@@ -28,7 +28,7 @@ class UserPGRepository implements UserRepository
         if (!$stmt->execute()) {
             throw new \Exception($stmt->errorInfo()[2]);
         }
-        return $this->getById((int) $this->db->lastInsertId());
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function getById(int $id)
@@ -42,7 +42,7 @@ class UserPGRepository implements UserRepository
             throw new \Exception($stmt->errorInfo()[2]);
         }
 
-        $user = $stmt->fetch( \PDO::FETCH_ASSOC );
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$user) {
             throw new \Exception("User not found");
