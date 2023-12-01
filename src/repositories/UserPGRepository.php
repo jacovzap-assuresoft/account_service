@@ -27,8 +27,18 @@ class UserPGRepository implements UserRepository
         $stmt->bindValue(':password', $user->getPassword());
         $stmt->bindValue(':role_id', $user->getRoleId());
 
-        if (!$stmt->execute()) {
-            throw new \Exception($stmt->errorInfo()[2]);
+        try {
+            if (!$stmt->execute()) {
+                throw new \Exception($stmt->errorInfo()[2]);
+            }
+        } catch (\Exception $e) {
+            if($e->getCode() == 23505) {
+                throw new \Exception("User with this email already exists", 409);
+            }
+            if($e->getCode() == 23502) {
+                throw new \Exception("User data is not valid", 400);
+            }
+            throw new \Exception($e->getMessage(), 500);
         }
         return UserMapper::toUser($stmt->fetch(\PDO::FETCH_ASSOC));
     }
