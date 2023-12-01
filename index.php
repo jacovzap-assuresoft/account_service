@@ -21,26 +21,33 @@ $userControllerFactory = new UserControllerFactory();
 $userController= $userControllerFactory->createPGController();
 
 Flight::route("POST /users", function () use ($userController) {
-    $userController->create();
+    $userData = Flight::request()->data->getData();
+    $res = $userController->create($userData);
+    Flight::json($res["data"], $res["status"]);
 });
 
 Flight::route("GET /users/@id", function ($id) use ($userController) {
     $id = (int) $id;
-    $userController->getById($id);
+    $res = $userController->getById($id);
+    Flight::json($res["data"], $res["status"]);
 });
 
 Flight::route("GET /users", function () use ($userController) {
-    $userController->getAll();
+    $res = $userController->getAll();
+    Flight::json($res["data"], $res["status"]);
 });
 
 Flight::route("PUT /users/@id", function ($id) use ($userController) {
     $id = (int) $id;
-    $userController->update($id);
+    $userData = Flight::request()->data->getData();
+    $res = $userController->update($id, $userData);
+    Flight::json($res["data"], $res["status"]);
 });
 
 Flight::route("DELETE /users/@id", function ($id) use ($userController) {
     $id = (int) $id;
-    $userController->delete($id);
+    $res = $userController->delete($id);
+    Flight::json($res["data"], $res["status"]);
 });
 
 Flight::start();

@@ -10,7 +10,6 @@ use PDO;
 class UserPGRepository implements UserRepository
 {
     private PDO $db;
-
     public function __construct()
     {
         $this->db = DBConnection::getConnection();
@@ -107,6 +106,12 @@ class UserPGRepository implements UserRepository
             throw new \Exception($stmt->errorInfo()[2]);
         }
 
-        return UserMapper::toUser($stmt->fetch(\PDO::FETCH_ASSOC));
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            throw new \Exception("User not found");
+        }
+
+        return UserMapper::toUser($user);
     }
 }

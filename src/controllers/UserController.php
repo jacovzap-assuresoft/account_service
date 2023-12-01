@@ -16,20 +16,24 @@ class UserController
         $this->repository = $repository;
     }
 
-    public function create()
+    public function create($userData)
     {
         try {
-            $userData = Flight::request()->data->getData();
-            $user = new User();
-            $user->hydrate($userData);
+            $user = User::hydrate($userData);
             $user = $this->repository->create($user);
 
-            Flight::json(UserMapper::toArrayWithoutPassword($user), 201);
+            return [
+                "data" => UserMapper::toArrayWithoutPassword($user),
+                "status" => 201
+            ];
         } catch (\Exception $e) {
-            Flight::halt(500, json_encode([
-                "error" => $e->getMessage(),
-                "trace" => $e->getTrace()
-            ]));
+            return [
+                "data" => [
+                    "error" => $e->getMessage(),
+                    "trace" => $e->getTrace()
+                ],
+                "status" => 500
+            ];
         }
     }
 
@@ -37,12 +41,18 @@ class UserController
     {
         try {
             $user = $this->repository->getById($id);
-            Flight::json(UserMapper::toArrayWithoutPassword($user), 200);
+            return [
+                "data" => UserMapper::toArrayWithoutPassword($user),
+                "status" => 200
+            ];
         } catch (\Exception $e) {
-            Flight::halt(404, json_encode([
-                "error" => $e->getMessage(),
-                "trace" => $e->getTrace()
-            ]));
+            return [
+                "data" => [
+                    "error" => $e->getMessage(),
+                    "trace" => $e->getTrace()
+                ],
+                "status" => 404
+            ];
         }
     }
 
@@ -53,29 +63,39 @@ class UserController
             $users = array_map(function ($user) {
                 return UserMapper::toArrayWithoutPassword($user);
             }, $users);
-            Flight::json($users, 200);
+            return [
+                "data" => $users,
+                "status" => 200
+            ];
         } catch (\Exception $e) {
-            Flight::halt(500, json_encode([
-                "error" => $e->getMessage(),
-                "trace" => $e->getTrace()
-            ]));
+            return [
+                "data" => [
+                    "error" => $e->getMessage(),
+                    "trace" => $e->getTrace()
+                ],
+                "status" => 404
+            ];
         }
     }
 
-    public function update(int $id)
+    public function update(int $id, array $userData)
     {
         try {
-            $userData = Flight::request()->data->getData();
-            $user = new User();
-            $user->hydrate($userData);
+            $user = User::hydrate($userData);
             $user->setId($id);
             $user = $this->repository->update($user);
-            Flight::json(UserMapper::toArrayWithoutPassword($user), 200);
+            return [
+                "data" => UserMapper::toArrayWithoutPassword($user),
+                "status" => 200
+            ];
         } catch (\Exception $e) {
-            Flight::halt(404, json_encode([
-                "error" => $e->getMessage(),
-                "trace" => $e->getTrace()
-            ]));
+            return [
+                "data" => [
+                    "error" => $e->getMessage(),
+                    "trace" => $e->getTrace()
+                ],
+                "status" => 404
+            ];
         }
     }
 
@@ -83,12 +103,18 @@ class UserController
     {
         try {
             $user = $this->repository->delete($id);
-            Flight::json(UserMapper::toArrayWithoutPassword($user), 200);
+            return [
+                "data" => UserMapper::toArrayWithoutPassword($user),
+                "status" => 200
+            ];
         } catch (\Exception $e) {
-            Flight::halt(404, json_encode([
-                "error" => $e->getMessage(),
-                "trace" => $e->getTrace()
-            ]));
+            return [
+                "data" => [
+                    "error" => $e->getMessage(),
+                    "trace" => $e->getTrace()
+                ],
+                "status" => 404
+            ];
         }
     }
 }

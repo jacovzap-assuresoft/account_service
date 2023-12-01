@@ -8,8 +8,7 @@ class UserMapper
 {
     public static function toUser(array $data) : User
     {
-        $user = new User();
-        $user->hydrate($data);
+        $user = User::hydrate($data);
         return $user;
     }
 

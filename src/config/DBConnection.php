@@ -12,7 +12,8 @@ class DBConnection
 
     public static function getConnection() : PDO
     {
-        if (self::$connection == null) {
+        if (self::$connection == null)
+        {
             $connectionPath = $_ENV['DB_CONNECTION'];
             $username = $_ENV['DB_USERNAME'];
             $password = $_ENV['DB_PASSWORD'];

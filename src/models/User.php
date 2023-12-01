@@ -49,7 +49,7 @@ class User
         return $this->roleId;
     }
 
-    public function setId(int $id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -69,27 +69,30 @@ class User
         $this->email = $email;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(?string $password): void
     {
-        $this->password = $this->hashPassword($password);
+        $password ? $this->password = $this->hashPassword($password) : $this->password = null;
     }
 
-    public function setRoleId(int $roleId): void
+    public function setRoleId(?int $roleId): void
     {
         $this->roleId = $roleId;
     }
 
-    public function hydrate(array $data): void
+    public static function hydrate(array $data): User
     {
-        $this->id = $data['id'] ?? null;
-        $this->name = $data['name'];
-        $this->lastName = $data['lastName'] ?? $data['last_name'];
-        $this->email = $data['email'];
+        $user = new User();
+        $user->setId($data['id'] ?? null);
+        $user->setName($data['name']);
+        $user->setLastName($data['lastName'] ?? $data['last_name']);
+        $user->setEmail($data['email']);
         if($data['password'] ?? false)
-            $this->password = $this->hashPassword($data['password']);
+            $user->setPassword($data['password']);
         else
-            $this->password = null;
-        $this->roleId = $data['roleId'] ?? $data['role_id'] ?? null;
+            $user->setPassword(null);
+        $user->setRoleId($data['roleId'] ?? $data['role_id'] ?? null);
+
+        return $user;
     }
 
     public static function verifyPassword(string $passwordHash, string $password): bool
