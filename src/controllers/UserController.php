@@ -30,9 +30,10 @@ class UserController
             return [
                 "data" => [
                     "error" => $e->getMessage(),
+                    "status" => $e->getCode() ?? 500,
                     "trace" => $e->getTrace()
                 ],
-                "status" => 500
+                "status" => $e->getCode() ?? 500
             ];
         }
     }

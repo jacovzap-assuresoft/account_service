@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  php:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: account_service_php
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+  database:
+    build:
+      context: ./
+      dockerfile: DB.Dockerfile
+    container_name: account_service_database
+    restart: always
+    ports:
+      - "5432:5432"
